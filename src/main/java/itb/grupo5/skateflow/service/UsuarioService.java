@@ -84,7 +84,8 @@ public class UsuarioService {
             String senha = Base64.getEncoder().encodeToString(usuario.getSenha().getBytes());
 
             usuarioAtualizado.setSenha(senha);
-            usuarioAtualizado.setDataCadastro(LocalDateTime.now());
+            // Mantém a data de cadastro original
+            // usuarioAtualizado.setDataCadastro(LocalDateTime.now()); - REMOVIDO
             usuarioAtualizado.setStatusUsuario("ATIVO");
 
             return usuarioRepository.save(usuarioAtualizado);
@@ -103,7 +104,7 @@ public class UsuarioService {
             String senha = Base64.getEncoder().encodeToString(senhaPadrao.getBytes());
 
             usuarioAtualizado.setSenha(senha);
-            usuarioAtualizado.setDataCadastro(LocalDateTime.now());
+            // Mantém a data de cadastro original
             usuarioAtualizado.setStatusUsuario("INATIVO");
 
             return usuarioRepository.save(usuarioAtualizado);
@@ -122,7 +123,7 @@ public class UsuarioService {
             String senha = Base64.getEncoder().encodeToString(senhaPadrao.getBytes());
 
             usuarioAtualizado.setSenha(senha);
-            usuarioAtualizado.setDataCadastro(LocalDateTime.now());
+            // Mantém a data de cadastro original
             usuarioAtualizado.setStatusUsuario("ATIVO");
 
             return usuarioRepository.save(usuarioAtualizado);
