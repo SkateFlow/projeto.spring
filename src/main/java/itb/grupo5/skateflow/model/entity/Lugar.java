@@ -20,7 +20,7 @@ public class Lugar {
     @Column(nullable = false)
     private String tipo; // Pista Particular ou Pública
 
-    @Column(length = 8)
+    
     private String cep;
 
     private String latitude;
