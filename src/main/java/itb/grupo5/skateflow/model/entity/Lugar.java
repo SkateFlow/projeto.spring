@@ -7,136 +7,145 @@ import java.math.BigDecimal;
 @Table(name = "Lugar")
 public class Lugar {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false)
-    private String nome;
+	@Column(nullable = false)
+	private String nome;
 
-    @Column(nullable = false, length = 400)
-    private String descricao;
+	@Column(nullable = false, length = 400)
+	private String descricao;
 
-    @Column(nullable = false)
-    private String tipo; // Pista Particular ou Pública
+	@Column(nullable = false)
+	private String tipo; // Pista Particular ou Pública
 
-    
-    private String cep;
+	private String cep;
+	private String latitude;
+	private String longitude;
+	private String numero;
 
-    private String latitude;
-    private String longitude;
+	@Lob
+	private byte[] foto;
 
-    private String numero;
+	@Column(nullable = false, precision = 8, scale = 2)
+	private BigDecimal valor;
 
-    @Lob
-    private byte[] foto;
+	@Column(nullable = false, length = 10)
+	private String statusPista; // ativada ou desativada/manutenção
 
-    @Column(nullable = false, precision = 8, scale = 2)
-    private BigDecimal valor;
+	@ManyToOne
+	@JoinColumn(name = "categoria_id", nullable = false)
+	private Categoria categoria;
 
-    @Column(nullable = false, length = 10)
-    private String statusPista; // ativada ou desativada/manutenção
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", nullable = false)
+	private Usuario usuario; // Relacionamento com a entidade Usuario
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Categoria categoria;
+	// Getters e Setters
+	public Long getId() {
+		return id;
+	}
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	// ... [outros getters e setters para cada campo] ...
 
-    // ... [outros getters e setters para cada campo] ...
-    
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public String getDescricao() {
-        return descricao;
-    }
+	public String getDescricao() {
+		return descricao;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
-    public String getTipo() {
-        return tipo;
-    }
+	public String getTipo() {
+		return tipo;
+	}
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-    public String getCep() {
-        return cep;
-    }
+	public String getCep() {
+		return cep;
+	}
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
 
-    public String getLatitude() {
-        return latitude;
-    }
+	public String getLatitude() {
+		return latitude;
+	}
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
-    public String getLongitude() {
-        return longitude;
-    }
+	public String getLongitude() {
+		return longitude;
+	}
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
-    public String getNumero() {
-        return numero;
-    }
+	public String getNumero() {
+		return numero;
+	}
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
 
-    public byte[] getFoto() {
-        return foto;
-    }
+	public byte[] getFoto() {
+		return foto;
+	}
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
+	}
 
-    public BigDecimal getValor() {
-        return valor;
-    }
+	public BigDecimal getValor() {
+		return valor;
+	}
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
 
-    public String getStatusPista() {
-        return statusPista;
-    }
+	public String getStatusPista() {
+		return statusPista;
+	}
 
-    public void setStatusPista(String statusPista) {
-        this.statusPista = statusPista;
-    }
+	public void setStatusPista(String statusPista) {
+		this.statusPista = statusPista;
+	}
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+	public Categoria getCategoria() {
+		return categoria;
+	}
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }
