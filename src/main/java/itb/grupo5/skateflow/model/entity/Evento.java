@@ -18,7 +18,9 @@ public class Evento {
 	private long id;
 	private String nome;
 	private String info;
-	private byte[] foto;
+	private byte[] foto1;
+	private byte[] foto2;
+	private byte[] foto3;
 	private LocalDateTime dataCadastro;
 	private LocalDateTime dataInicio;
 	private LocalDateTime dataFim;
@@ -59,12 +61,28 @@ public class Evento {
 		this.info = info;
 	}
 
-	public byte[] getFoto() {
-		return foto;
+	public byte[] getFoto1() {
+		return foto1;
 	}
 
-	public void setFoto(byte[] foto) {
-		this.foto = foto;
+	public void setFoto1(byte[] foto1) {
+		this.foto1 = foto1;
+	}
+
+	public byte[] getFoto2() {
+		return foto2;
+	}
+
+	public void setFoto2(byte[] foto2) {
+		this.foto2 = foto2;
+	}
+
+	public byte[] getFoto3() {
+		return foto3;
+	}
+
+	public void setFoto3(byte[] foto3) {
+		this.foto3 = foto3;
 	}
 
 	public LocalDateTime getDataCadastro() {

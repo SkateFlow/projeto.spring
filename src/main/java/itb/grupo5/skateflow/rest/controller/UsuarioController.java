@@ -148,4 +148,24 @@ public class UsuarioController {
 
 		throw new ResourceNotFoundException("Erro ao atualizar o usuário!");
 	}
+
+	// Obter foto do usuário em Base64
+	@GetMapping("/foto/{id}")
+	public ResponseEntity<String> getFotoBase64(@PathVariable long id) {
+		String fotoBase64 = usuarioService.getFotoAsBase64(id);
+		if (fotoBase64 != null) {
+			return ResponseEntity.ok(fotoBase64);
+		}
+		throw new ResourceNotFoundException("Foto não encontrada para o usuário!");
+	}
+
+	// Salvar foto do usuário via Base64
+	@PutMapping("/foto/{id}")
+	public ResponseEntity<?> salvarFotoBase64(@PathVariable long id, @RequestBody String fotoBase64) {
+		Usuario usuario = usuarioService.salvarFotoBase64(id, fotoBase64);
+		if (usuario != null) {
+			return ResponseEntity.ok("Foto salva com sucesso!");
+		}
+		throw new ResourceNotFoundException("Erro ao salvar foto do usuário!");
+	}
 }

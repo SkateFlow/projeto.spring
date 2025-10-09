@@ -75,4 +75,42 @@ public class LugarController {
 		}
 		throw new ResourceNotFoundException("Erro ao deletar lugar!");
 	}
+
+	// Endpoints para obter fotos em Base64
+	@GetMapping("/foto1/{id}")
+	public ResponseEntity<String> getFoto1Base64(@PathVariable Long id) {
+		String foto = lugarService.getFoto1AsBase64(id);
+		return foto != null ? ResponseEntity.ok(foto) : ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/foto2/{id}")
+	public ResponseEntity<String> getFoto2Base64(@PathVariable Long id) {
+		String foto = lugarService.getFoto2AsBase64(id);
+		return foto != null ? ResponseEntity.ok(foto) : ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/foto3/{id}")
+	public ResponseEntity<String> getFoto3Base64(@PathVariable Long id) {
+		String foto = lugarService.getFoto3AsBase64(id);
+		return foto != null ? ResponseEntity.ok(foto) : ResponseEntity.notFound().build();
+	}
+
+	// Endpoints para salvar fotos via Base64
+	@PutMapping("/foto1/{id}")
+	public ResponseEntity<?> salvarFoto1Base64(@PathVariable Long id, @RequestBody String fotoBase64) {
+		Lugar lugar = lugarService.salvarFoto1Base64(id, fotoBase64);
+		return lugar != null ? ResponseEntity.ok("Foto 1 salva com sucesso!") : ResponseEntity.badRequest().body("Erro ao salvar foto 1!");
+	}
+
+	@PutMapping("/foto2/{id}")
+	public ResponseEntity<?> salvarFoto2Base64(@PathVariable Long id, @RequestBody String fotoBase64) {
+		Lugar lugar = lugarService.salvarFoto2Base64(id, fotoBase64);
+		return lugar != null ? ResponseEntity.ok("Foto 2 salva com sucesso!") : ResponseEntity.badRequest().body("Erro ao salvar foto 2!");
+	}
+
+	@PutMapping("/foto3/{id}")
+	public ResponseEntity<?> salvarFoto3Base64(@PathVariable Long id, @RequestBody String fotoBase64) {
+		Lugar lugar = lugarService.salvarFoto3Base64(id, fotoBase64);
+		return lugar != null ? ResponseEntity.ok("Foto 3 salva com sucesso!") : ResponseEntity.badRequest().body("Erro ao salvar foto 3!");
+	}
 }

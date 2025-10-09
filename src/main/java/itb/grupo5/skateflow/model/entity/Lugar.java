@@ -26,7 +26,13 @@ public class Lugar {
 	private String numero;
 
 	@Lob
-	private byte[] foto;
+	private byte[] foto1;
+
+	@Lob
+	private byte[] foto2;
+
+	@Lob
+	private byte[] foto3;
 
 	@Column(nullable = false, precision = 8, scale = 2)
 	private BigDecimal valor;
@@ -109,12 +115,28 @@ public class Lugar {
 		this.numero = numero;
 	}
 
-	public byte[] getFoto() {
-		return foto;
+	public byte[] getFoto1() {
+		return foto1;
 	}
 
-	public void setFoto(byte[] foto) {
-		this.foto = foto;
+	public void setFoto1(byte[] foto1) {
+		this.foto1 = foto1;
+	}
+
+	public byte[] getFoto2() {
+		return foto2;
+	}
+
+	public void setFoto2(byte[] foto2) {
+		this.foto2 = foto2;
+	}
+
+	public byte[] getFoto3() {
+		return foto3;
+	}
+
+	public void setFoto3(byte[] foto3) {
+		this.foto3 = foto3;
 	}
 
 	public BigDecimal getValor() {

@@ -173,4 +173,30 @@ public class UsuarioService {
 
 		return null;
 	}
+
+	// Converter foto do usuário para Base64
+	public String getFotoAsBase64(long id) {
+		Usuario usuario = findById(id);
+		if (usuario != null && usuario.getFoto() != null) {
+			return Base64.getEncoder().encodeToString(usuario.getFoto());
+		}
+		return null;
+	}
+
+	// Salvar foto a partir de Base64
+	@Transactional
+	public Usuario salvarFotoBase64(long id, String fotoBase64) {
+		Optional<Usuario> _usuario = usuarioRepository.findById(id);
+		if (_usuario.isPresent() && fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
+			Usuario usuario = _usuario.get();
+			try {
+				byte[] fotoBytes = Base64.getDecoder().decode(fotoBase64);
+				usuario.setFoto(fotoBytes);
+				return usuarioRepository.save(usuario);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("String Base64 inválida para foto", e);
+			}
+		}
+		return null;
+	}
 }

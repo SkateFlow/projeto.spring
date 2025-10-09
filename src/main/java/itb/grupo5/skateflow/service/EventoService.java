@@ -13,6 +13,7 @@ import itb.grupo5.skateflow.model.entity.Usuario;
 import itb.grupo5.skateflow.repository.EventoRepository;
 import itb.grupo5.skateflow.repository.LugarRepository;
 import itb.grupo5.skateflow.repository.UsuarioRepository;
+import java.util.Base64;
 
 @Service
 public class EventoService {
@@ -84,7 +85,9 @@ public class EventoService {
 			// Atualizando os campos da entidade Evento
 			eventoExistente.setNome(eventoAtualizado.getNome());
 			eventoExistente.setInfo(eventoAtualizado.getInfo());
-			eventoExistente.setFoto(eventoAtualizado.getFoto());
+			eventoExistente.setFoto1(eventoAtualizado.getFoto1());
+			eventoExistente.setFoto2(eventoAtualizado.getFoto2());
+			eventoExistente.setFoto3(eventoAtualizado.getFoto3());
 			eventoExistente.setDataInicio(eventoAtualizado.getDataInicio());
 			eventoExistente.setDataFim(eventoAtualizado.getDataFim());
 			eventoExistente.setStatusEvento(eventoAtualizado.getStatusEvento());
@@ -124,5 +127,55 @@ public class EventoService {
 			return true;
 		}
 		return false;
+	}
+
+	// Converter fotos do evento para Base64
+	public String getFoto1AsBase64(long id) {
+		Evento evento = findById(id);
+		return evento != null && evento.getFoto1() != null ? Base64.getEncoder().encodeToString(evento.getFoto1()) : null;
+	}
+
+	public String getFoto2AsBase64(long id) {
+		Evento evento = findById(id);
+		return evento != null && evento.getFoto2() != null ? Base64.getEncoder().encodeToString(evento.getFoto2()) : null;
+	}
+
+	public String getFoto3AsBase64(long id) {
+		Evento evento = findById(id);
+		return evento != null && evento.getFoto3() != null ? Base64.getEncoder().encodeToString(evento.getFoto3()) : null;
+	}
+
+	// Salvar fotos a partir de Base64
+	@Transactional
+	public Evento salvarFoto1Base64(long id, String fotoBase64) {
+		Optional<Evento> _evento = eventoRepository.findById(id);
+		if (_evento.isPresent() && fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
+			Evento evento = _evento.get();
+			evento.setFoto1(Base64.getDecoder().decode(fotoBase64));
+			return eventoRepository.save(evento);
+		}
+		return null;
+	}
+
+	@Transactional
+	public Evento salvarFoto2Base64(long id, String fotoBase64) {
+		Optional<Evento> _evento = eventoRepository.findById(id);
+		if (_evento.isPresent() && fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
+			Evento evento = _evento.get();
+			evento.setFoto2(Base64.getDecoder().decode(fotoBase64));
+			return eventoRepository.save(evento);
+		}
+		return null;
+	}
+
+	@Transactional
+	public Evento salvarFoto3Base64(long id, String fotoBase64) {
+		Optional<Evento> _evento = eventoRepository.findById(id);
+		if (_evento.isPresent() && fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
+			Evento evento = _evento.get();
+			evento.setFoto3(Base64.getDecoder().decode(fotoBase64));
+			return eventoRepository.save(evento);
+		}
+		return null;
 	}
 }
