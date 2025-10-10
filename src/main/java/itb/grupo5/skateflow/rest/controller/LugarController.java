@@ -1,23 +1,35 @@
 package itb.grupo5.skateflow.rest.controller;
 
 import java.util.List;
+import java.util.Base64;
+import java.math.BigDecimal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import itb.grupo5.skateflow.model.entity.Lugar;
+import itb.grupo5.skateflow.model.entity.Categoria;
+import itb.grupo5.skateflow.model.entity.Usuario;
+import itb.grupo5.skateflow.model.dto.LugarDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import itb.grupo5.skateflow.rest.exception.ResourceNotFoundException;
 import itb.grupo5.skateflow.service.LugarService;
+import itb.grupo5.skateflow.service.CategoriaService;
+import itb.grupo5.skateflow.service.UsuarioService;
 
 @RestController
 @RequestMapping("/lugar")
 public class LugarController {
 
 	private final LugarService lugarService;
+	private final CategoriaService categoriaService;
+	private final UsuarioService usuarioService;
 
-	// Construtor que injeta o service LugarService
-	public LugarController(LugarService lugarService) {
+	// Construtor que injeta os services
+	public LugarController(LugarService lugarService, CategoriaService categoriaService, UsuarioService usuarioService) {
 		this.lugarService = lugarService;
+		this.categoriaService = categoriaService;
+		this.usuarioService = usuarioService;
 	}
 
 	// Teste básico para verificar se a API está funcionando
@@ -28,12 +40,88 @@ public class LugarController {
 
 	// Endpoint para salvar um novo lugar
 	@PostMapping("/save")
-	public ResponseEntity<?> save(@RequestBody Lugar lugar) {
-		Lugar novoLugar = lugarService.save(lugar); // Chama o serviço para salvar o lugar
-		if (novoLugar != null) {
-			return ResponseEntity.ok("Lugar cadastrado com sucesso");
+	public ResponseEntity<?> save(@RequestBody java.util.Map<String, Object> request) {
+		try {
+			// Verificar se tem categoriaId (indica que é DTO)
+			if (request.containsKey("categoriaId")) {
+				System.out.println("=== PROCESSANDO DTO ===");
+				System.out.println("Request: " + request);
+				
+				ObjectMapper mapper = new ObjectMapper();
+				LugarDTO lugarDTO = mapper.convertValue(request, LugarDTO.class);
+				
+				System.out.println("CategoriaId: " + lugarDTO.getCategoriaId());
+				System.out.println("UsuarioId: " + lugarDTO.getUsuarioId());
+				
+				// Buscar categoria
+				Categoria categoria = categoriaService.findById(lugarDTO.getCategoriaId());
+				System.out.println("Categoria encontrada: " + (categoria != null ? categoria.getNome() : "null"));
+				if (categoria == null) {
+					throw new ResourceNotFoundException("Categoria não encontrada com ID: " + lugarDTO.getCategoriaId());
+				}
+
+				// Buscar usuário
+				Usuario usuario = usuarioService.findById(lugarDTO.getUsuarioId());
+				System.out.println("Usuario encontrado: " + (usuario != null ? usuario.getNome() : "null"));
+				if (usuario == null) {
+					throw new ResourceNotFoundException("Usuário não encontrado com ID: " + lugarDTO.getUsuarioId());
+				}
+
+				// Criar entidade Lugar
+				Lugar lugar = new Lugar();
+				lugar.setNome(lugarDTO.getNome());
+				lugar.setDescricao(lugarDTO.getDescricao());
+				lugar.setTipo(lugarDTO.getTipo());
+				lugar.setCep(lugarDTO.getCep());
+				lugar.setNumero(lugarDTO.getNumero());
+				lugar.setLatitude(lugarDTO.getLatitude());
+				lugar.setLongitude(lugarDTO.getLongitude());
+				lugar.setValor(lugarDTO.getValor() != null ? lugarDTO.getValor() : BigDecimal.ZERO);
+				lugar.setStatusPista(lugarDTO.getStatusPista());
+				lugar.setCategoria(categoria);
+				lugar.setUsuario(usuario);
+
+				// Converter fotos base64 para byte[]
+				if (lugarDTO.getFoto1() != null && !lugarDTO.getFoto1().isEmpty()) {
+					try {
+						lugar.setFoto1(Base64.getDecoder().decode(lugarDTO.getFoto1()));
+					} catch (Exception e) {
+						System.err.println("Erro ao decodificar foto1: " + e.getMessage());
+					}
+				}
+				if (lugarDTO.getFoto2() != null && !lugarDTO.getFoto2().isEmpty()) {
+					try {
+						lugar.setFoto2(Base64.getDecoder().decode(lugarDTO.getFoto2()));
+					} catch (Exception e) {
+						System.err.println("Erro ao decodificar foto2: " + e.getMessage());
+					}
+				}
+				if (lugarDTO.getFoto3() != null && !lugarDTO.getFoto3().isEmpty()) {
+					try {
+						lugar.setFoto3(Base64.getDecoder().decode(lugarDTO.getFoto3()));
+					} catch (Exception e) {
+						System.err.println("Erro ao decodificar foto3: " + e.getMessage());
+					}
+				}
+
+				Lugar novoLugar = lugarService.save(lugar);
+				if (novoLugar != null) {
+					return ResponseEntity.ok("Lugar criado com sucesso");
+				}
+			} else {
+				// Processar como entidade Lugar normal
+				ObjectMapper mapper = new ObjectMapper();
+				Lugar lugar = mapper.convertValue(request, Lugar.class);
+				Lugar novoLugar = lugarService.save(lugar);
+				if (novoLugar != null) {
+					return ResponseEntity.ok("Lugar cadastrado com sucesso");
+				}
+			}
+			throw new ResourceNotFoundException("Erro ao cadastrar lugar");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ResourceNotFoundException("Erro ao processar solicitação: " + e.getMessage());
 		}
-		throw new ResourceNotFoundException("Erro ao cadastrar lugar");
 	}
 
 	// Endpoint para listar todos os lugares
